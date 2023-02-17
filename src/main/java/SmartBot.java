@@ -373,6 +373,7 @@ public class SmartBot {
     }
 
     private static List<Furniture> identifyEnemyFurniture(List<Coordinate> tote) {
+        List<Furniture> furnitureList= new ArrayList<>();
         List<List<Coordinate>> matchedCoordinates = new ArrayList<>();
         tote.forEach(toter -> {
             List<List<Coordinate>> result = new ArrayList<>();
@@ -382,9 +383,20 @@ public class SmartBot {
                     result.set(0, list);
                 }
             });
+            matchedCoordinates.remove(result.get(0));
             result.get(0).add(toter);
+            matchedCoordinates.add(result.get(0));
         });
-        return new ArrayList<>();
+        matchedCoordinates.forEach(list -> {
+            furnitureList.add(new Furniture(list.size()));
+        });
+        return furnitureList;
+    }
+
+    private static int getMinimumSizeOfMissingFurnitures(List<Coordinate> tote) {
+        List<Furniture> toteFs = identifyEnemyFurniture(tote);
+
+        return 0;
     }
 
     private static int[] getRandomCoord() {
