@@ -103,7 +103,12 @@ public class Siuuuu {
                 boards.set(1, new String[10][10]);
 
 
-                List<Furniture> furs = placeFurniture();
+                List<Furniture> furs = null;
+                int panikin = 0;
+                int PANIK = 5;
+                do {
+                    furs = placeFurniture(panikin++ > PANIK);
+                }while (furs == null);
 
                 Furniture[] furArr = new Furniture[5];
                 furArr[0] = furs.get(0);
@@ -332,8 +337,9 @@ public class Siuuuu {
         socket.open();
     }
 
-    private static List<Furniture> placeFurniture() {
+    private static List<Furniture> placeFurniture(boolean panikin) {
 
+        int PANIK = 30;
         Furniture fuenfer = new Furniture(5);
         Furniture vierer = new Furniture(4);
         Furniture dreier1 = new Furniture(3);
@@ -348,7 +354,7 @@ public class Siuuuu {
         //   {"start":[1,5],"direction":"v","size":3},
         //   {"start":[3,5],"direction":"v","size":3},
         //   {"start":[5,5],"direction":"v","size":2}
-        if (false) {
+        if (panikin) {
             fuenfer.setDirection("h");
             fuenfer.setStart(new int[]{4, 3});
 
@@ -372,43 +378,67 @@ public class Siuuuu {
             return furnitures;
         }
 
+        int safetyCount = 0;
         do {
             fuenfer.setDirection(getRandomDirection());
             fuenfer.setStart(getRandomCoord());
-        } while (!checkPlacement(fuenfer, furnitures));
+            safetyCount++;
+        } while (safetyCount < PANIK && !checkPlacement(fuenfer, furnitures));
         furnitures.add(fuenfer);
         System.out.println("5er");
+        if (safetyCount >= PANIK) {
+            return null;
+        }
 
+        safetyCount = 0;
         do {
             vierer.setDirection(getRandomDirection());
             vierer.setStart(getRandomCoord());
-        } while (!checkPlacement(vierer, furnitures));
+            safetyCount++;
+        } while (safetyCount < PANIK && !checkPlacement(vierer, furnitures));
         furnitures.add(vierer);
         System.out.println("4er");
-
+        if (safetyCount >= PANIK) {
+            return null;
+        }
+        safetyCount = 0;
         do {
             dreier1.setDirection(getRandomDirection());
             dreier1.setStart(getRandomCoord());
-        } while (!checkPlacement(dreier1, furnitures));
+            safetyCount++;
+        } while (safetyCount < PANIK && !checkPlacement(dreier1, furnitures));
         furnitures.add(dreier1);
         System.out.println("3er");
-
+        if (safetyCount >= PANIK) {
+            return null;
+        }
+        safetyCount = 0;
         do {
             dreier2.setDirection(getRandomDirection());
             dreier2.setStart(getRandomCoord());
-        } while (!checkPlacement(dreier2, furnitures));
+            safetyCount++;
+        } while (safetyCount < PANIK && !checkPlacement(dreier2, furnitures));
         furnitures.add(dreier2);
         System.out.println("3er");
-
+        if (safetyCount >= PANIK) {
+            return null;
+        }
+        safetyCount = 0;
         do {
             zweier.setDirection(getRandomDirection());
             zweier.setStart(getRandomCoord());
-        } while (!checkPlacement(zweier, furnitures));
+            safetyCount++;
+        } while (safetyCount < PANIK && !checkPlacement(zweier, furnitures));
         furnitures.add(zweier);
         System.out.println("2er");
+        if (safetyCount >= PANIK) {
+            return null;
+        }
+
 
         return furnitures;
     }
+
 
     private static List<Furniture> identifyEnemyFurniture(List<Coordinate> tote) {
         List<Furniture> furnitureList = new ArrayList<>();
