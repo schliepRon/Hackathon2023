@@ -1,6 +1,7 @@
 # Hackathon2023
 
 Bots aus dem Hackathon Leer 2023
+
 [SIUUUU](src/main/java/Siuuuu.java)
 MÖBEL PLACEMENT: Handpicked Presets 
 GUESSING: 
@@ -28,6 +29,7 @@ BEI TREFFER:
 zus. AUSSCHLUSS von Feldern: 
 - alle bereits beschossenen Felder
 - im Umkreis von vollständigen Abschüssen
+
 
 [Sp1tzk0pfL4rry](src/main/java/Spitzkopf.java)
 MÖBEL PLACEMENT: Random
