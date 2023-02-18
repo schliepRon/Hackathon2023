@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class SmartBot {
+public class Curs3d {
     public static final String SECRET = "bddbfb09-62b6-426f-b712-b19a52f72dcb"; //Das Secret des Bot
     public static final String GAMESERVER = "https://games.uhno.de"; //URL zum Gameserver
 
