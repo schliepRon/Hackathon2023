@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class SmartBot {
-    public static final String SECRET = "d8352d52-1c31-4df8-9aa6-abb3d2966152"; //Das Secret des Bot
+    public static final String SECRET = "bddbfb09-62b6-426f-b712-b19a52f72dcb"; //Das Secret des Bot
     public static final String GAMESERVER = "https://games.uhno.de"; //URL zum Gameserver
 
     //Verschiedene Arten von Rueckgaben
@@ -73,6 +73,7 @@ public class SmartBot {
 
 
         Map<String, List<Coordinate>> leftCoordsToShoot = new HashMap<>();
+        Map<String, List<Coordinate>> schachbrett = new HashMap<>();
         Map<String, Coordinate> lastShot = new HashMap<>();
         Map<String, Integer> winLoss = new HashMap<>();
         Map<String, Furniture[]> furnitureArr = new HashMap<>();
@@ -101,33 +102,15 @@ public class SmartBot {
                 boards.set(0, new String[10][10]);
                 boards.set(1, new String[10][10]);
 
+
+                List<Furniture> furs = placeFurniture();
+
                 Furniture[] furArr = new Furniture[5];
-
-                Furniture fuenfer = new Furniture(5);
-                Furniture vierer = new Furniture(4);
-                Furniture dreier1 = new Furniture(3);
-                Furniture dreier2 = new Furniture(3);
-                Furniture zweier = new Furniture(2);
-                fuenfer.setDirection("h");
-                fuenfer.setStart(new int[]{4, 3});
-
-                vierer.setDirection("v");
-                vierer.setStart(new int[]{8, 6});
-
-                dreier1.setDirection("v");
-                dreier1.setStart(new int[]{1, 5});
-
-                dreier2.setDirection("v");
-                dreier2.setStart(new int[]{3, 5});
-
-                zweier.setDirection("v");
-                zweier.setStart(new int[]{5, 5});
-
-                furArr[0] = fuenfer;
-                furArr[1] = vierer;
-                furArr[2] = dreier1;
-                furArr[3] = dreier2;
-                furArr[4] = zweier;
+                furArr[0] = furs.get(0);
+                furArr[1] = furs.get(1);
+                furArr[2] = furs.get(2);
+                furArr[3] = furs.get(3);
+                furArr[4] = furs.get(4);
 
                 furnitureArr.put(object.getId(), furArr);
                 List<Coordinate> allCords = new ArrayList<>();
@@ -136,10 +119,22 @@ public class SmartBot {
                         allCords.add(new Coordinate(x, y));
                     }
                 }
+                List<Coordinate> halfCoords = new ArrayList<>();
+                for (int x = 0; x < 10; x++) {
+                    for (int y = 0; y < 10; y++) {
+                        if (y % 2 == 0 && x % 2 == 0
+                                || y % 2 == 1 && x % 2 == 1) {
+                            halfCoords.add(new Coordinate(x, y));
+                        }
+                    }
+                }
+
                 Collections.shuffle(allCords);
+                Collections.shuffle(halfCoords);
 
                 lastShot.put(object.getId(), new Coordinate(0, 0));
 
+                schachbrett.put(object.getId(), halfCoords);
                 leftCoordsToShoot.put(object.getId(), allCords);
             } else if (type.getType().equalsIgnoreCase(SET)) {
 
@@ -251,10 +246,18 @@ public class SmartBot {
                     System.out.println("\tanliegendes abschiessen");
                     move = sinnvolleZiele.stream().findAny().orElse(leftCoordsToShoot.get(object.getId()).get(0));
                 } else {
-                    move = leftCoordsToShoot.get(object.getId()).get(0);
+                    if (leftCoordsToShoot.size() == 100) {
+                        move = new Coordinate(6, 6);
+                    } else if (leftCoordsToShoot.size() == 99) {
+                        move = new Coordinate(4, 4);
+                    } else {
+                        move = schachbrett.get(object.getId()).stream().filter(point -> leftCoordsToShoot.get(object.getId()).contains(point))
+                                .findFirst().orElse(leftCoordsToShoot.get(object.getId()).get(0));
+                    }
                 }
 
                 leftCoordsToShoot.get(object.getId()).remove(move);
+                schachbrett.get(object.getId()).remove(move);
                 lastShot.replace(object.getId(), move);
 
 
@@ -373,7 +376,7 @@ public class SmartBot {
     }
 
     private static List<Furniture> identifyEnemyFurniture(List<Coordinate> tote) {
-        List<Furniture> furnitureList= new ArrayList<>();
+        List<Furniture> furnitureList = new ArrayList<>();
         List<List<Coordinate>> matchedCoordinates = new ArrayList<>();
         tote.forEach(toter -> {
             List<List<Coordinate>> result = new ArrayList<>();

@@ -101,33 +101,40 @@ public class WolkenBot {
                 boards.set(0, new String[10][10]);
                 boards.set(1, new String[10][10]);
 
-                Furniture[] furArr = new Furniture[5];
+                List<Furniture> furs = placeFurniture();
 
-                Furniture fuenfer = new Furniture(5);
-                Furniture vierer = new Furniture(4);
-                Furniture dreier1 = new Furniture(3);
-                Furniture dreier2 = new Furniture(3);
-                Furniture zweier = new Furniture(2);
-                fuenfer.setDirection("h");
-                fuenfer.setStart(new int[]{4, 3});
-
-                vierer.setDirection("v");
-                vierer.setStart(new int[]{8, 6});
-
-                dreier1.setDirection("v");
-                dreier1.setStart(new int[]{1, 5});
-
-                dreier2.setDirection("v");
-                dreier2.setStart(new int[]{3, 5});
-
-                zweier.setDirection("v");
-                zweier.setStart(new int[]{5, 5});
-
-                furArr[0] = fuenfer;
-                furArr[1] = vierer;
-                furArr[2] = dreier1;
-                furArr[3] = dreier2;
-                furArr[4] = zweier;
+                Furniture[] furArr =  new Furniture[5];
+                furArr[0] = furs.get(0);
+                furArr[1] = furs.get(1);
+                furArr[2] = furs.get(2);
+                furArr[3] = furs.get(3);
+                furArr[4] = furs.get(4);
+//
+//                Furniture fuenfer = new Furniture(5);
+//                Furniture vierer = new Furniture(4);
+//                Furniture dreier1 = new Furniture(3);
+//                Furniture dreier2 = new Furniture(3);
+//                Furniture zweier = new Furniture(2);
+//                fuenfer.setDirection("h");
+//                fuenfer.setStart(new int[]{4, 3});
+//
+//                vierer.setDirection("v");
+//                vierer.setStart(new int[]{8, 6});
+//
+//                dreier1.setDirection("v");
+//                dreier1.setStart(new int[]{1, 5});
+//
+//                dreier2.setDirection("v");
+//                dreier2.setStart(new int[]{3, 5});
+//
+//                zweier.setDirection("v");
+//                zweier.setStart(new int[]{5, 5});
+//
+//                furArr[0] = fuenfer;
+//                furArr[1] = vierer;
+//                furArr[2] = dreier1;
+//                furArr[3] = dreier2;
+//                furArr[4] = zweier;
 
                 furnitureArr.put(object.getId(), furArr);
                 List<Coordinate> allCords = new ArrayList<>();
