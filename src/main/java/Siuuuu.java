@@ -14,15 +14,19 @@ import io.socket.engineio.client.transports.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.awt.*;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Siuuuu {
-    public static final String SECRET = "a8af82dc-d4c0-4b37-9ad5-b683547a1a31"; //Das Secret des Bot
+    public static final String SECRET = "9650f11e-1f15-44cf-8937-6e07e0781814"; //Das Secret des Bot
     public static final String GAMESERVER = "https://games.uhno.de"; //URL zum Gameserver
 
     //Verschiedene Arten von Rueckgaben
@@ -42,6 +46,15 @@ public class Siuuuu {
             return;
         }
 
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            try {
+                Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=xcfft9RCM6I"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
 
         URI uri = URI.create(GAMESERVER);
         IO.Options options = IO.Options.builder()
@@ -67,10 +80,6 @@ public class Siuuuu {
             System.out.println("disconnect");
         });
 
-        String[][] myBoard = new String[10][10];
-        String[][] enemyBoard = new String[10][10];
-        List<String[][]> boards = new ArrayList<>();
-
         Map<Coordinate, Integer> trefferCache = new LinkedHashMap<>();
         Map<String, List<Coordinate>> leftCoordsToShoot = new HashMap<>();
         Map<String, List<Coordinate>> leftCoordsToShootLogical = new HashMap<>();
@@ -85,9 +94,6 @@ public class Siuuuu {
         winLoss.put("WIN", 0);
         winLoss.put("LOSS", 0);
 
-        boards.add(myBoard);
-        boards.add(enemyBoard);
-
         socket.on("data", (data) -> {
             //der aufbau von data ist hier wie folgt:
             //in data[0] ist immer der json-response
@@ -100,9 +106,6 @@ public class Siuuuu {
             if (type.getType().equalsIgnoreCase(INIT)) {
                 System.out.println("Neue Runde!");
                 Init object = gson.fromJson(json, Init.class);
-                boards.set(0, new String[10][10]);
-                boards.set(1, new String[10][10]);
-
 
                 List<Furniture> furs = null;
                 int panikin = 0;
@@ -143,6 +146,7 @@ public class Siuuuu {
                 schachbrett.put(object.getId(), halfCoords);
                 leftCoordsToShoot.put(object.getId(), allCords);
                 leftCoordsToShootLogical.put(object.getId(), new ArrayList<>(allCords));
+
             } else if (type.getType().equalsIgnoreCase(SET)) {
 
                 System.out.println("\tSet");
@@ -208,7 +212,7 @@ public class Siuuuu {
                 });
 
                 List<Coordinate> sinnvolleZiele = new ArrayList<>();
-                //Tote & anliegende löschen
+                //Tote & anliegende lï¿½schen
                 tot.get(object.getId()).forEach(entry -> leftCoordsToShoot.get(object.getId()).removeAll(getCoordsAround(entry)));
                 tot.get(object.getId()).forEach(entry -> leftCoordsToShootLogical.get(object.getId()).removeAll(getCoordsAround(entry)));
 
@@ -307,10 +311,10 @@ public class Siuuuu {
                         })
                         .collect(Collectors.toList());
                 logicalLeft.sort((o1, o2) -> {
-                    Coordinate abstaendeO1 = checkCoordForMinSizeMid(leftCoordsToShoot.get(object.getId()),
+                    Coordinate abstaendeO1 = getCenterOfFreeFieldLine(leftCoordsToShoot.get(object.getId()),
                             tot.get(object.getId()), o1,
                             true, true, true);
-                    Coordinate abstaendeO2 = checkCoordForMinSizeMid(leftCoordsToShoot.get(object.getId()),
+                    Coordinate abstaendeO2 = getCenterOfFreeFieldLine(leftCoordsToShoot.get(object.getId()),
                             tot.get(object.getId()), o1,
                             true, true, true);
                     if (abstaendeO2.compare(abstaendeO1, Direction.HORIZONTAL) != 0) {
@@ -571,6 +575,9 @@ public class Siuuuu {
                 furnitures.add(zweier);
                 return furnitures;
         }
+        //LOGIK zum Zufallslayout entfernt, da scheinbar hardcoded starke layouts besser sind
+        // in curs3d existiert die logik noch
+
 //        if (panikin) {
 //            fuenfer.setDirection("h");
 //            fuenfer.setStart(new int[]{4, 3});
@@ -704,9 +711,9 @@ public class Siuuuu {
         return !fitsH && !fitsV ? 0 : fitsH && !fitsV ? 1 : !fitsH && fitsV ? 2 : 3;
     }
 
-    private static Coordinate checkCoordForMinSizeMid(List<Coordinate> left, List<Coordinate> tote, Coordinate coord,
-                                                      boolean h, boolean v,
-                                                      boolean up) {
+    private static Coordinate getCenterOfFreeFieldLine(List<Coordinate> left, List<Coordinate> tote, Coordinate coord,
+                                                       boolean h, boolean v,
+                                                       boolean up) {
         int fitsH = 0;
         int fitsV = 0;
         int minimum = getMinimumSizeOfMissingFurnitures(tote);

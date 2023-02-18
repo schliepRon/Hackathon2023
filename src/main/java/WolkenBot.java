@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class WolkenBot {
-    public static final String SECRET = "d8352d52-1c31-4df8-9aa6-abb3d2966152"; //Das Secret des Bot
+    public static final String SECRET = "730c8df3-68ea-4ea3-be35-6282aa049b21"; //Das Secret des Bot
     public static final String GAMESERVER = "https://games.uhno.de"; //URL zum Gameserver
 
     //Verschiedene Arten von Rueckgaben
@@ -208,7 +208,7 @@ public class WolkenBot {
                 });
 
                 List<Coordinate> sinnvolleZiele = new ArrayList<>();
-                //Tote & anliegende löschen
+                //Tote & anliegende lï¿½schen
                 tot.get(object.getId()).forEach(entry -> leftCoordsToShoot.get(object.getId()).removeAll(getCoordsAround(entry)));
                 tot.get(object.getId()).forEach(entry -> leftCoordsToShootLogical.get(object.getId()).removeAll(getCoordsAround(entry)));
 
