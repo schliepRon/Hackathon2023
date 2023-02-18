@@ -1,5 +1,7 @@
 package classes;
 
+import classes.board.Direction;
+
 import java.util.Arrays;
 
 public class Coordinate {
@@ -57,5 +59,31 @@ public class Coordinate {
         int result = x;
         result = 31 * result + y;
         return result;
+    }
+
+
+    public int compare(Object o, Direction direction) {
+        if (this == o) {
+            return 0;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return 0;
+        }
+
+        Coordinate that = (Coordinate) o;
+
+        if(direction == Direction.HORIZONTAL) {
+            return Integer.compare(this.x, that.x);
+        }else {
+            return Integer.compare(this.y, that.y);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Coordinate{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

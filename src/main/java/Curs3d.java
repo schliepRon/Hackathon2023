@@ -226,29 +226,30 @@ public class Curs3d {
                             List<Coordinate> finalSinnvolleZiele2 = sinnvolleZiele;
                             angehittet.get(object.getId()).forEach(hit -> finalSinnvolleZiele2.addAll(getCoordsAroundVertical(hit)));
                             sinnvolleZiele.addAll(finalSinnvolleZiele2);
-                            System.out.println("Vertical");
+//                            System.out.println("Vertical");
                         } else {
                             List<Coordinate> finalSinnvolleZiele1 = sinnvolleZiele;
                             angehittet.get(object.getId()).forEach(hit -> finalSinnvolleZiele1.addAll(getCoordsAroundHorizontal(hit)));
                             sinnvolleZiele.addAll(finalSinnvolleZiele1);
-                            System.out.println("Horizontal");
+//                            System.out.println("Horizontal");
                         }
                     } else {
                         List<Coordinate> finalSinnvolleZiele = sinnvolleZiele;
                         angehittet.get(object.getId()).forEach(hit -> finalSinnvolleZiele.addAll(getCoordsAroundWithoutDiagonal(hit)));
                         sinnvolleZiele.addAll(finalSinnvolleZiele);
-                        System.out.println("Unbekannte Richtung");
+//                        System.out.println("Unbekannte Richtung");
                     }
                     sinnvolleZiele =
                             sinnvolleZiele.stream().distinct().filter(around -> leftCoordsToShoot.get(object.getId()).contains(around))
                                     .collect(Collectors.toList());
 
-                    System.out.println("SINNVOLL");
+//                    System.out.println("SINNVOLL");
                     sinnvolleZiele.forEach(coordinate -> {
-                        System.out.println(coordinate.getX() + " " + coordinate.getY());
+//                        System.out.println(coordinate.getX() + " " + coordinate.getY());
                     });
 
-                    System.out.println("\tanliegendes abschiessen");
+                    Collections.shuffle(sinnvolleZiele);
+//                    System.out.println("\tanliegendes abschiessen");
                     move = sinnvolleZiele.stream().findAny().orElse(leftCoordsToShoot.get(object.getId()).get(0));
                 } else {
                     if (leftCoordsToShoot.size() == 100) {
@@ -269,12 +270,12 @@ public class Curs3d {
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.put(move.getX());
                 jsonArray.put(move.getY());
-                System.out.println("\tWir schicken: " + jsonArray);
+//                System.out.println("\tWir schicken: " + jsonArray);
 
                 //hier rufen wir dann auf dem Ack entsprechend unser ergebnis auf
                 ack.call(jsonArray);
             } else if (type.getType().equalsIgnoreCase(RESULT)) {
-                System.out.println("Runde vorbei!");
+//                System.out.println("Runde vorbei!");
                 ResultPlayer myself = null;
                 try {
                     Result object = gson.fromJson(json, Result.class);
@@ -438,7 +439,7 @@ public class Curs3d {
     }
 
     private static String getRandomDirection() {
-        int randomNum = ThreadLocalRandom.current().nextInt(0, 1);
+        int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
         if (randomNum == 1) {
             return Direction.HORIZONTAL.getAlias();
         }

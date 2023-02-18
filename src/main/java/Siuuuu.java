@@ -73,6 +73,7 @@ public class Siuuuu {
 
         Map<Coordinate, Integer> trefferCache = new LinkedHashMap<>();
         Map<String, List<Coordinate>> leftCoordsToShoot = new HashMap<>();
+        Map<String, List<Coordinate>> leftCoordsToShootLogical = new HashMap<>();
         Map<String, List<Coordinate>> schachbrett = new HashMap<>();
         Map<String, Coordinate> lastShot = new HashMap<>();
         Map<String, Integer> winLoss = new HashMap<>();
@@ -108,7 +109,7 @@ public class Siuuuu {
                 int PANIK = 5;
                 do {
                     furs = placeFurniture(panikin++ > PANIK);
-                }while (furs == null);
+                } while (furs == null);
 
                 Furniture[] furArr = new Furniture[5];
                 furArr[0] = furs.get(0);
@@ -141,6 +142,7 @@ public class Siuuuu {
 
                 schachbrett.put(object.getId(), halfCoords);
                 leftCoordsToShoot.put(object.getId(), allCords);
+                leftCoordsToShootLogical.put(object.getId(), new ArrayList<>(allCords));
             } else if (type.getType().equalsIgnoreCase(SET)) {
 
                 System.out.println("\tSet");
@@ -208,6 +210,7 @@ public class Siuuuu {
                 List<Coordinate> sinnvolleZiele = new ArrayList<>();
                 //Tote & anliegende löschen
                 tot.get(object.getId()).forEach(entry -> leftCoordsToShoot.get(object.getId()).removeAll(getCoordsAround(entry)));
+                tot.get(object.getId()).forEach(entry -> leftCoordsToShootLogical.get(object.getId()).removeAll(getCoordsAround(entry)));
 
                 if (angehittet.get(object.getId()).size() > 0) {
 //
@@ -226,70 +229,105 @@ public class Siuuuu {
                             List<Coordinate> finalSinnvolleZiele2 = sinnvolleZiele;
                             angehittet.get(object.getId()).forEach(hit -> finalSinnvolleZiele2.addAll(getCoordsAroundVertical(hit)));
                             sinnvolleZiele.addAll(finalSinnvolleZiele2);
-                            System.out.println("Vertical");
+//                            System.out.println("Vertical");
                         } else {
                             List<Coordinate> finalSinnvolleZiele1 = sinnvolleZiele;
                             angehittet.get(object.getId()).forEach(hit -> finalSinnvolleZiele1.addAll(getCoordsAroundHorizontal(hit)));
                             sinnvolleZiele.addAll(finalSinnvolleZiele1);
-                            System.out.println("Horizontal");
+//                            System.out.println("Horizontal");
                         }
                     } else {
                         List<Coordinate> finalSinnvolleZiele = sinnvolleZiele;
                         angehittet.get(object.getId()).forEach(hit -> finalSinnvolleZiele.addAll(getCoordsAroundWithoutDiagonal(hit)));
                         sinnvolleZiele.addAll(finalSinnvolleZiele);
-                        System.out.println("Unbekannte Richtung");
+//                        System.out.println("Unbekannte Richtung");
                     }
                     sinnvolleZiele =
                             sinnvolleZiele.stream().distinct().filter(around -> leftCoordsToShoot.get(object.getId()).contains(around))
                                     .collect(Collectors.toList());
 
-                    System.out.println("SINNVOLL");
+//                    System.out.println("SINNVOLL");
                     sinnvolleZiele.forEach(coordinate -> {
-                        System.out.println(coordinate.getX() + " " + coordinate.getY());
+//                        System.out.println(coordinate.getX() + " " + coordinate.getY());
                     });
 
-                    System.out.println("\tanliegendes abschiessen");
-                    move[0] = sinnvolleZiele.stream().findAny().orElse(leftCoordsToShoot.get(object.getId()).get(0));
+                    Collections.shuffle(sinnvolleZiele);
+//                    System.out.println("\tanliegendes abschiessen");
+                    move[0] =
+                            sinnvolleZiele.stream().findAny()
+                                    .orElse(
+                                            leftCoordsToShootLogical.get(object.getId()).stream().findFirst()
+                                                    .orElse(
+                                                            leftCoordsToShoot.get(object.getId()).stream().findFirst()
+                                                                    .orElse(null)
+                                                    )
+                                    );
                 } else {
-                    if (leftCoordsToShoot.size() == 100) {
-                        move[0] = new Coordinate(6, 6);
-                    } else if (leftCoordsToShoot.size() == 99) {
-                        move[0] = new Coordinate(4, 4);
+
+                    Map<Coordinate, Integer> ranking = new LinkedHashMap<>();
+                    trefferCache.entrySet()
+                            .stream()
+                            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                            .forEachOrdered(element -> ranking.put(element.getKey(), element.getValue()));
+                    List<Coordinate> schachfeld =
+                            schachbrett.get(object.getId()).stream().filter(point -> leftCoordsToShoot.get(object.getId()).contains(point))
+                                    .collect(Collectors.toList());
+                    if (ranking.size() > 0 && ranking.get(0) != null && ranking.get(0) > 10) {
+                        ranking.keySet().forEach(rank -> {
+                            if (schachfeld.contains(rank)) {
+                                move[0] = rank;
+                                return;
+                            } else {
+                                move[0] = schachfeld.stream()
+                                        .findFirst().orElse(leftCoordsToShootLogical.get(object.getId()).size() > 0 ?
+                                                leftCoordsToShootLogical.get(object.getId()).get(0) :
+                                                leftCoordsToShoot.get(object.getId()).get(0));
+                            }
+                        });
                     } else {
-                        Map<Coordinate, Integer> ranking = new LinkedHashMap<>();
-                        trefferCache.entrySet()
-                                .stream()
-                                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                                .forEachOrdered(element -> ranking.put(element.getKey(), element.getValue()));
-                        List<Coordinate> schachfeld =
-                                schachbrett.get(object.getId()).stream().filter(point -> leftCoordsToShoot.get(object.getId()).contains(point))
-                                        .collect(Collectors.toList());
-                        if (ranking.size() > 0 && ranking.get(0) != null && ranking.get(0) > 10) {
-                            ranking.keySet().forEach(rank -> {
-                                if (schachfeld.contains(rank)) {
-                                    move[0] = rank;
-                                    return;
-                                }else {
-                                    move[0] = schachfeld.stream()
-                                            .findFirst().orElse(leftCoordsToShoot.get(object.getId()).get(0));
-                                }
-                            });
-                        } else {
-                            move[0] = schachfeld.stream()
-                                    .findFirst().orElse(leftCoordsToShoot.get(object.getId()).get(0));
-                        }
+                        move[0] = schachfeld.stream()
+                                .findFirst().orElse(
+                                        leftCoordsToShootLogical.get(object.getId()).size() > 0 ?
+                                                leftCoordsToShootLogical.get(object.getId()).get(0) :
+                                                leftCoordsToShoot.get(object.getId()).get(0)
+                                );
                     }
+
                 }
 
                 leftCoordsToShoot.get(object.getId()).remove(move[0]);
+                leftCoordsToShootLogical.get(object.getId()).remove(move[0]);
                 schachbrett.get(object.getId()).remove(move[0]);
                 lastShot.replace(object.getId(), move[0]);
 
+                List<Coordinate> logicalLeft = leftCoordsToShoot.get(object.getId()).stream()
+                        .filter(coordinate -> {
+                            return checkCoordForMinSize(leftCoordsToShoot.get(object.getId()),
+                                    tot.get(object.getId()), coordinate, true, true, true) > 0;
+                        })
+                        .collect(Collectors.toList());
+                logicalLeft.sort((o1, o2) -> {
+                    Coordinate abstaendeO1 = checkCoordForMinSizeMid(leftCoordsToShoot.get(object.getId()),
+                            tot.get(object.getId()), o1,
+                            true, true, true);
+                    Coordinate abstaendeO2 = checkCoordForMinSizeMid(leftCoordsToShoot.get(object.getId()),
+                            tot.get(object.getId()), o1,
+                            true, true, true);
+                    if (abstaendeO2.compare(abstaendeO1, Direction.HORIZONTAL) != 0) {
+                        return abstaendeO2.compare(abstaendeO1, Direction.HORIZONTAL);
+                    }
+                    return abstaendeO2.compare(abstaendeO1, Direction.VERTICAL);
+                });
+
+                System.out.println("Logical Rest: " + logicalLeft.size());
+                leftCoordsToShootLogical.get(object.getId()).removeAll(leftCoordsToShootLogical.get(object.getId()).stream().filter(target -> {
+                    return !logicalLeft.contains(target);
+                }).collect(Collectors.toList()));
 
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.put(move[0].getX());
                 jsonArray.put(move[0].getY());
-                System.out.println("\tWir schicken: " + jsonArray);
+//                System.out.println("\tWir schicken: " + jsonArray);
 
                 //hier rufen wir dann auf dem Ack entsprechend unser ergebnis auf
                 ack.call(jsonArray);
@@ -445,6 +483,7 @@ public class Siuuuu {
         List<List<Coordinate>> matchedCoordinates = new ArrayList<>();
         tote.forEach(toter -> {
             List<List<Coordinate>> result = new ArrayList<>();
+            result.add(new ArrayList<>());
             List<Coordinate> anliegendeCoords = getCoordsAroundWithoutDiagonal(toter);
             matchedCoordinates.forEach(list -> {
                 if (anliegendeCoords.stream().anyMatch(list::contains)) {
@@ -463,8 +502,103 @@ public class Siuuuu {
 
     private static int getMinimumSizeOfMissingFurnitures(List<Coordinate> tote) {
         List<Furniture> toteFs = identifyEnemyFurniture(tote);
+        if (toteFs.size() <= 0) {
+            return 2;
+        }
+        return toteFs.stream().mapToInt(toter -> toter.getSize()).min().orElse(2);
+    }
 
-        return 0;
+    private static int checkCoordForMinSize(List<Coordinate> left, List<Coordinate> tote, Coordinate coord,
+                                            boolean h, boolean v,
+                                            boolean up) {
+        boolean fitsH = false;
+        boolean fitsV = false;
+        int minimum = getMinimumSizeOfMissingFurnitures(tote);
+        System.out.println(coord.toString() + " " + minimum);
+        if (h) {
+            fitsH = getFreeCoordsInDirection(left, coord, Direction.HORIZONTAL, new ArrayList<>()).size() >= minimum;
+        }
+        if (v) {
+            fitsV = getFreeCoordsInDirection(left, coord, Direction.VERTICAL, new ArrayList<>()).size() >= minimum;
+        }
+        System.out.println(fitsH + " H - " + fitsV + " V ");
+        return !fitsH && !fitsV ? 0 : fitsH && !fitsV ? 1 : !fitsH && fitsV ? 2 : 3;
+    }
+
+    private static Coordinate checkCoordForMinSizeMid(List<Coordinate> left, List<Coordinate> tote, Coordinate coord,
+                                                      boolean h, boolean v,
+                                                      boolean up) {
+        int fitsH = 0;
+        int fitsV = 0;
+        int minimum = getMinimumSizeOfMissingFurnitures(tote);
+        System.out.println(coord.toString() + " " + minimum);
+        if (h) {
+            fitsH =
+                    getFreeCoordsInDirection(left, coord, Direction.HORIZONTAL, new ArrayList<>()).stream().filter(coordinate -> {
+                        return coordinate.compare(coord, Direction.HORIZONTAL) > 0;
+                    }).collect(Collectors.toList()).size();
+            fitsH = fitsH > 3 ? 0 : fitsH;
+        }
+        if (v) {
+            fitsV =
+                    getFreeCoordsInDirection(left, coord, Direction.VERTICAL, new ArrayList<>()).stream().filter(coordinate -> {
+                        return coordinate.compare(coord, Direction.VERTICAL) > 0;
+                    }).collect(Collectors.toList()).size();
+            fitsV = fitsV > 3 ? 0 : fitsV;
+        }
+        System.out.println(fitsH + " H - " + fitsV + " V ");
+        return new Coordinate(fitsH, fitsV);
+    }
+
+    private static List<Coordinate> getFreeCoordsInDirection(List<Coordinate> left, Coordinate coord,
+                                                             Direction direction, List<Coordinate> results) {
+        List<Coordinate> result = new ArrayList<>();
+        if (left.contains(coord) && !results.contains(coord)) {
+            result.add(coord);
+        } else {
+            return result;
+        }
+        if (direction == Direction.HORIZONTAL) {
+            Coordinate tryCord = coord;
+            do {
+                tryCord = new Coordinate(tryCord.getX() + 1, tryCord.getY());
+                if (!left.contains(tryCord)) {
+                    tryCord = null;
+                } else {
+                    result.add(tryCord);
+                }
+            } while (tryCord != null);
+
+            tryCord = coord;
+            do {
+                tryCord = new Coordinate(tryCord.getX() - 1, tryCord.getY());
+                if (!left.contains(tryCord)) {
+                    tryCord = null;
+                } else {
+                    result.add(tryCord);
+                }
+            } while (tryCord != null);
+        } else {
+            Coordinate tryCord = coord;
+            do {
+                tryCord = new Coordinate(tryCord.getX(), tryCord.getY() + 1);
+                if (!left.contains(tryCord)) {
+                    tryCord = null;
+                } else {
+                    result.add(tryCord);
+                }
+            } while (tryCord != null);
+            tryCord = coord;
+            do {
+                tryCord = new Coordinate(tryCord.getX(), tryCord.getY() - 1);
+                if (!left.contains(tryCord)) {
+                    tryCord = null;
+                } else {
+                    result.add(tryCord);
+                }
+            } while (tryCord != null);
+        }
+        return result.stream().distinct().collect(Collectors.toList());
     }
 
     private static int[] getRandomCoord() {
@@ -474,7 +608,7 @@ public class Siuuuu {
     }
 
     private static String getRandomDirection() {
-        int randomNum = ThreadLocalRandom.current().nextInt(0, 1);
+        int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
         if (randomNum == 1) {
             return Direction.HORIZONTAL.getAlias();
         }
@@ -550,13 +684,13 @@ public class Siuuuu {
         List<Coordinate> coordsToCheck = getFullCoordsOfFurniture(toCheck);
         AtomicBoolean match = new AtomicBoolean(false);
         for (Furniture other : others) {
-            System.out.println("size of Other " + other.getSize());
+//            System.out.println("size of Other " + other.getSize());
             List<Coordinate> otherCoords = getFullCoordsOfFurniture(other);
             List<Coordinate> otherCoordsColls = getFullCollissionZoneOfFurniture(otherCoords);
             otherCoordsColls.forEach(entry -> {
-                System.out.println(entry.getX() + " / " + entry.getY());
+//                System.out.println(entry.getX() + " / " + entry.getY());
                 if (coordsToCheck.contains(entry)) {
-                    System.out.println("collission");
+//                    System.out.println("collission");
                     match.set(true);
                 }
             });
