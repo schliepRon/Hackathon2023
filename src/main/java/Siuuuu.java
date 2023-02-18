@@ -392,89 +392,268 @@ public class Siuuuu {
         //   {"start":[1,5],"direction":"v","size":3},
         //   {"start":[3,5],"direction":"v","size":3},
         //   {"start":[5,5],"direction":"v","size":2}
-        if (panikin) {
-            fuenfer.setDirection("h");
-            fuenfer.setStart(new int[]{4, 3});
+        int randomNum = ThreadLocalRandom.current().nextInt(0, 7);
+        switch (randomNum) {
+            case 0:
+                fuenfer.setDirection("h");
+                fuenfer.setStart(new int[]{0, 0});
 
-            vierer.setDirection("v");
-            vierer.setStart(new int[]{8, 6});
+                vierer.setDirection("h");
+                vierer.setStart(new int[]{6, 0});
 
-            dreier1.setDirection("v");
-            dreier1.setStart(new int[]{1, 5});
+                dreier1.setDirection("h");
+                dreier1.setStart(new int[]{0, 2});
 
-            dreier2.setDirection("v");
-            dreier2.setStart(new int[]{3, 5});
+                dreier2.setDirection("h");
+                dreier2.setStart(new int[]{4, 2});
 
-            zweier.setDirection("v");
-            zweier.setStart(new int[]{5, 5});
+                zweier.setDirection("h");
+                zweier.setStart(new int[]{8, 3});
 
-            furnitures.add(fuenfer);
-            furnitures.add(vierer);
-            furnitures.add(dreier1);
-            furnitures.add(dreier2);
-            furnitures.add(zweier);
-            return furnitures;
+                furnitures.add(fuenfer);
+                furnitures.add(vierer);
+                furnitures.add(dreier1);
+                furnitures.add(dreier2);
+                furnitures.add(zweier);
+                return furnitures;
+            case 1:
+                fuenfer.setDirection("h");
+                fuenfer.setStart(new int[]{0, 9});
+
+                vierer.setDirection("h");
+                vierer.setStart(new int[]{6, 9});
+
+                dreier1.setDirection("h");
+                dreier1.setStart(new int[]{0, 7});
+
+                dreier2.setDirection("h");
+                dreier2.setStart(new int[]{4, 1});
+
+                zweier.setDirection("h");
+                zweier.setStart(new int[]{8, 7});
+
+                furnitures.add(fuenfer);
+                furnitures.add(vierer);
+                furnitures.add(dreier1);
+                furnitures.add(dreier2);
+                furnitures.add(zweier);
+                return furnitures;
+            case 2:
+                fuenfer.setDirection("v");
+                fuenfer.setStart(new int[]{0, 0});
+
+                vierer.setDirection("v");
+                vierer.setStart(new int[]{0, 6});
+
+                dreier1.setDirection("v");
+                dreier1.setStart(new int[]{2, 0});
+
+                dreier2.setDirection("v");
+                dreier2.setStart(new int[]{2, 4});
+
+                zweier.setDirection("v");
+                zweier.setStart(new int[]{2, 8});
+
+                furnitures.add(fuenfer);
+                furnitures.add(vierer);
+                furnitures.add(dreier1);
+                furnitures.add(dreier2);
+                furnitures.add(zweier);
+                return furnitures;
+            case 3:
+                fuenfer.setDirection("v");
+                fuenfer.setStart(new int[]{9, 0});
+
+                vierer.setDirection("v");
+                vierer.setStart(new int[]{9, 6});
+
+                dreier1.setDirection("v");
+                dreier1.setStart(new int[]{7, 0});
+
+                dreier2.setDirection("v");
+                dreier2.setStart(new int[]{7, 4});
+
+                zweier.setDirection("v");
+                zweier.setStart(new int[]{7, 8});
+
+                furnitures.add(fuenfer);
+                furnitures.add(vierer);
+                furnitures.add(dreier1);
+                furnitures.add(dreier2);
+                furnitures.add(zweier);
+                return furnitures;
+            case 4:
+                fuenfer.setDirection("h");
+                fuenfer.setStart(new int[]{0, 0});
+
+                vierer.setDirection("h");
+                vierer.setStart(new int[]{6, 0});
+
+                dreier1.setDirection("h");
+                dreier1.setStart(new int[]{0, 9});
+
+                dreier2.setDirection("h");
+                dreier2.setStart(new int[]{4, 9});
+
+                zweier.setDirection("h");
+                zweier.setStart(new int[]{8, 9});
+
+                furnitures.add(fuenfer);
+                furnitures.add(vierer);
+                furnitures.add(dreier1);
+                furnitures.add(dreier2);
+                furnitures.add(zweier);
+                return furnitures;
+            case 5:
+                fuenfer.setDirection("h");
+                fuenfer.setStart(new int[]{3, 0});
+
+                vierer.setDirection("v");
+                vierer.setStart(new int[]{9, 3});
+
+                dreier1.setDirection("v");
+                dreier1.setStart(new int[]{0, 4});
+
+                dreier2.setDirection("h");
+                dreier2.setStart(new int[]{4, 9});
+
+                zweier.setDirection("h");
+                zweier.setStart(new int[]{5, 5});
+
+                furnitures.add(fuenfer);
+                furnitures.add(vierer);
+                furnitures.add(dreier1);
+                furnitures.add(dreier2);
+                furnitures.add(zweier);
+                return furnitures;
+            case 6:
+                fuenfer.setDirection("h");
+                fuenfer.setStart(new int[]{3, 1});
+
+                vierer.setDirection("v");
+                vierer.setStart(new int[]{8, 3});
+
+                dreier1.setDirection("v");
+                dreier1.setStart(new int[]{1, 4});
+
+                dreier2.setDirection("h");
+                dreier2.setStart(new int[]{4, 9});
+
+                zweier.setDirection("h");
+                zweier.setStart(new int[]{4, 5});
+
+                furnitures.add(fuenfer);
+                furnitures.add(vierer);
+                furnitures.add(dreier1);
+                furnitures.add(dreier2);
+                furnitures.add(zweier);
+                return furnitures;
+            default:
+                fuenfer.setDirection("h");
+                fuenfer.setStart(new int[]{0, 9});
+
+                vierer.setDirection("h");
+                vierer.setStart(new int[]{6, 8});
+
+                dreier1.setDirection("h");
+                dreier1.setStart(new int[]{0, 0});
+
+                dreier2.setDirection("h");
+                dreier2.setStart(new int[]{4, 0});
+
+                zweier.setDirection("h");
+                zweier.setStart(new int[]{8, 0});
+
+                furnitures.add(fuenfer);
+                furnitures.add(vierer);
+                furnitures.add(dreier1);
+                furnitures.add(dreier2);
+                furnitures.add(zweier);
+                return furnitures;
         }
-
-        int safetyCount = 0;
-        do {
-            fuenfer.setDirection(getRandomDirection());
-            fuenfer.setStart(getRandomCoord());
-            safetyCount++;
-        } while (safetyCount < PANIK && !checkPlacement(fuenfer, furnitures));
-        furnitures.add(fuenfer);
-        System.out.println("5er");
-        if (safetyCount >= PANIK) {
-            return null;
-        }
-
-        safetyCount = 0;
-        do {
-            vierer.setDirection(getRandomDirection());
-            vierer.setStart(getRandomCoord());
-            safetyCount++;
-        } while (safetyCount < PANIK && !checkPlacement(vierer, furnitures));
-        furnitures.add(vierer);
-        System.out.println("4er");
-        if (safetyCount >= PANIK) {
-            return null;
-        }
-        safetyCount = 0;
-        do {
-            dreier1.setDirection(getRandomDirection());
-            dreier1.setStart(getRandomCoord());
-            safetyCount++;
-        } while (safetyCount < PANIK && !checkPlacement(dreier1, furnitures));
-        furnitures.add(dreier1);
-        System.out.println("3er");
-        if (safetyCount >= PANIK) {
-            return null;
-        }
-        safetyCount = 0;
-        do {
-            dreier2.setDirection(getRandomDirection());
-            dreier2.setStart(getRandomCoord());
-            safetyCount++;
-        } while (safetyCount < PANIK && !checkPlacement(dreier2, furnitures));
-        furnitures.add(dreier2);
-        System.out.println("3er");
-        if (safetyCount >= PANIK) {
-            return null;
-        }
-        safetyCount = 0;
-        do {
-            zweier.setDirection(getRandomDirection());
-            zweier.setStart(getRandomCoord());
-            safetyCount++;
-        } while (safetyCount < PANIK && !checkPlacement(zweier, furnitures));
-        furnitures.add(zweier);
-        System.out.println("2er");
-        if (safetyCount >= PANIK) {
-            return null;
-        }
-
-
-        return furnitures;
+//        if (panikin) {
+//            fuenfer.setDirection("h");
+//            fuenfer.setStart(new int[]{4, 3});
+//
+//            vierer.setDirection("v");
+//            vierer.setStart(new int[]{8, 6});
+//
+//            dreier1.setDirection("v");
+//            dreier1.setStart(new int[]{1, 5});
+//
+//            dreier2.setDirection("v");
+//            dreier2.setStart(new int[]{3, 5});
+//
+//            zweier.setDirection("v");
+//            zweier.setStart(new int[]{5, 5});
+//
+//            furnitures.add(fuenfer);
+//            furnitures.add(vierer);
+//            furnitures.add(dreier1);
+//            furnitures.add(dreier2);
+//            furnitures.add(zweier);
+//            return furnitures;
+//        }
+//
+//        int safetyCount = 0;
+//        do {
+//            fuenfer.setDirection(getRandomDirection());
+//            fuenfer.setStart(getRandomCoord());
+//            safetyCount++;
+//        } while (safetyCount < PANIK && !checkPlacement(fuenfer, furnitures));
+//        furnitures.add(fuenfer);
+//        System.out.println("5er");
+//        if (safetyCount >= PANIK) {
+//            return null;
+//        }
+//
+//        safetyCount = 0;
+//        do {
+//            vierer.setDirection(getRandomDirection());
+//            vierer.setStart(getRandomCoord());
+//            safetyCount++;
+//        } while (safetyCount < PANIK && !checkPlacement(vierer, furnitures));
+//        furnitures.add(vierer);
+//        System.out.println("4er");
+//        if (safetyCount >= PANIK) {
+//            return null;
+//        }
+//        safetyCount = 0;
+//        do {
+//            dreier1.setDirection(getRandomDirection());
+//            dreier1.setStart(getRandomCoord());
+//            safetyCount++;
+//        } while (safetyCount < PANIK && !checkPlacement(dreier1, furnitures));
+//        furnitures.add(dreier1);
+//        System.out.println("3er");
+//        if (safetyCount >= PANIK) {
+//            return null;
+//        }
+//        safetyCount = 0;
+//        do {
+//            dreier2.setDirection(getRandomDirection());
+//            dreier2.setStart(getRandomCoord());
+//            safetyCount++;
+//        } while (safetyCount < PANIK && !checkPlacement(dreier2, furnitures));
+//        furnitures.add(dreier2);
+//        System.out.println("3er");
+//        if (safetyCount >= PANIK) {
+//            return null;
+//        }
+//        safetyCount = 0;
+//        do {
+//            zweier.setDirection(getRandomDirection());
+//            zweier.setStart(getRandomCoord());
+//            safetyCount++;
+//        } while (safetyCount < PANIK && !checkPlacement(zweier, furnitures));
+//        furnitures.add(zweier);
+//        System.out.println("2er");
+//        if (safetyCount >= PANIK) {
+//            return null;
+//        }
+//
+//
+//        return furnitures;
     }
 
 
